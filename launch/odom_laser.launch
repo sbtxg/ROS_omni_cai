@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
+  <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>  
+  <param name="serial_baudrate"     type="int"    value="115200"/>
+  <param name="frame_id"            type="string" value="base_laser"/>
+  <param name="inverted"            type="bool"   value="false"/>
+  <param name="angle_compensate"    type="bool"   value="true"/>
+  </node>
+
+  <node pkg="omni_car" type="tf_laser" name="tf_laser" />
+  <node pkg="omni_car" type="stm32_odom" name="stm32_odom" respawn="true" output="screen" />
+
+</launch>

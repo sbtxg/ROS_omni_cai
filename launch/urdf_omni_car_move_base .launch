@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <!-- Run the map server -->
+   <node name="map_server" pkg="map_server" type="map_server" args="$(find omni_car)/maps/map.yaml" output="screen"/>
+
+  <include file="$(find amcl)/examples/amcl_omni.launch" >
+  </include> 
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <param name="controller_frequency" value="10.0"/>
+    <param name="controller_patiente" value="15.0"/>
+    <!--param name="base_global_planner" value="dstar_global_planner/DStarPlannerROS"/-->
+    <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
+    <rosparam file="$(find omni_car)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find omni_car)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find omni_car)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find omni_car)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find omni_car)/config/base_local_planner_params.yaml" command="load" />
+   
+  </node>
+    <arg name="model" default="$(find omni_car)/urdf/robot1_base_04.xacro"/>
+    <param name="robot_description" command="$(find xacro)/xacro.py $(arg model)" />
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+  <!-- start robot state publisher -->
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen"/>
+
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find omni_car)/config/omni_car_urdf.rviz"/>
+
+</launch>
