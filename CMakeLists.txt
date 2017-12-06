@@ -13,7 +13,12 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf
   serial
+  cv_bridge
+  image_transport
+  camera_info_manager
 )
+
+find_package(OpenCV REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -109,6 +114,9 @@ catkin_package(
 #  LIBRARIES omni_car
 #  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
+    #  cv_bridge
+    #  image_transport
+    #  camera_info_manager
 )
 
 ###########
@@ -120,7 +128,9 @@ catkin_package(
 # include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
+  ${OpenCV_INCLUDE_DIRS}
 )
+
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -167,6 +177,10 @@ target_link_libraries(imu_test ${catkin_LIBRARIES} )
 
 add_executable(serial_odom_new src/serial_odom_new.cpp)
 target_link_libraries(serial_odom_new ${catkin_LIBRARIES} )
+
+add_executable(camera_timer src/camera_timer.cpp)
+target_link_libraries(camera_timer ${catkin_LIBRARIES})
+
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
